@@ -1,0 +1,109 @@
+openapi: 3.1.0
+info:
+  title: Polygon.io Market Data API
+  description: >
+    Access real-time and historical stock market data using the official Polygon.io API. This version includes endpoints available on the free tier such as last trade data and previous close.
+  version: 1.0.0
+servers:
+  - url: https://api.polygon.io
+    description: Polygon.io production server
+paths:
+  /v2/last/trade/{ticker}:
+    get:
+      operationId: getLastTrade
+      summary: Get last trade for a stock
+      description: Returns the most recent trade data for a given stock ticker.
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          description: Stock ticker symbol (e.g., AAPL, TSLA)
+          schema:
+            type: string
+        - name: apiKey
+          in: query
+          required: true
+          description: Your Polygon.io API key
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Last trade data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  symbol:
+                    type: string
+                  last:
+                    type: object
+                    properties:
+                      price:
+                        type: number
+                      size:
+                        type: integer
+                      exchange:
+                        type: integer
+                      cond1:
+                        type: integer
+                      timestamp:
+                        type: integer
+  /v2/aggs/ticker/{ticker}/prev:
+    get:
+      operationId: getPreviousClose
+      summary: Get previous close data
+      description: Returns previous day’s open, close, high, low, and volume for a given stock ticker.
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          description: Stock ticker symbol (e.g., AAPL, TSLA)
+          schema:
+            type: string
+        - name: apiKey
+          in: query
+          required: true
+          description: Your Polygon.io API key
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Previous close data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticker:
+                    type: string
+                  queryCount:
+                    type: integer
+                  resultsCount:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        o:
+                          type: number
+                          description: Open price
+                        c:
+                          type: number
+                          description: Close price
+                        h:
+                          type: number
+                          description: High price
+                        l:
+                          type: number
+                          description: Low price
+                        v:
+                          type: number
+                          description: Volume
+                        t:
+                          type: integer
+                          description: Timestamp in ms
+components: {}
